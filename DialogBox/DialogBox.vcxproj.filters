@@ -25,16 +25,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resource.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="among_us_player_red_icon_156942.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="valorant_logo_play_riot_games_icon_228477.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="among_us_player_red_icon_156942.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

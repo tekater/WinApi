@@ -15,6 +15,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
+
 	case WM_INITDIALOG:
 	{
 		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON2));
@@ -22,21 +23,46 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		SetFocus(GetDlgItem(hwnd, IDC_EDIT_PASSWORD));
 		//SetFocus(GetDlgItem(hwnd, IDC_EDIT_LOGIN));
 		//SetFocus(GetDlgItem(hwnd, IDOK));
-
 		if (GetFocus() == GetDlgItem(hwnd, IDC_EDIT_LOGIN)) {
 			SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_SETTEXT, 0, (LPARAM)"");
 		}
 		else {
 			SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_SETTEXT, 0, (LPARAM)"Введите логин");
 		}
-
+		//SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_SETTEXT, 0, (LPARAM)"");
 	}
 		break;
+
+	
 
 	case WM_COMMAND:
 
 		switch (LOWORD(wParam))
 		{
+
+		/*case IDC_EDIT_LOGIN:
+		{
+			CHAR lg_buffer[256] = {};
+			SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_GETTEXT, 256, (LPARAM)lg_buffer);
+
+			if ((LPARAM)lg_buffer == (LPARAM)"Введите логин")
+			{
+				SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_SETTEXT, 0, (LPARAM)"");
+			}
+		}
+			break;
+		
+		case IDC_EDIT_PASSWORD:
+		{
+			CHAR lg_buffer[256] = {};
+			SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_GETTEXT, 256, (LPARAM)lg_buffer);
+
+			if ((LPARAM)lg_buffer == (LPARAM)"")
+			{
+				SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_SETTEXT, 0, (LPARAM)"Введите логин");
+			}
+		}
+			break;*/
 
 		case IDC_BUTTON_COPY:
 		{
@@ -47,11 +73,11 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			// (2) - Получаем обработчик текстовых полей:
 			HWND hLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
 			HWND hPassword = GetDlgItem(hwnd, IDC_EDIT_PASSWORD);
-			
-			      // Функция GetDlgItem()
-			      // по ID-ресурса дочернего окна возвращает HWND соответствующего дочернего окна
 
-		    // (3) - Читаем текст из текствого поля 'Login':
+			// Функция GetDlgItem()
+			// по ID-ресурса дочернего окна возвращает HWND соответствующего дочернего окна
+
+	  // (3) - Читаем текст из текствого поля 'Login':
 			SendMessage(hLogin, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
 
 			// (4) - Загружаем содержимое текстового буфера в поле 'Password':
@@ -64,7 +90,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			// }
 
 		}
-			break;
+		break;
 
 		case IDOK:
 			MessageBox
@@ -86,5 +112,6 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		EndDialog(hwnd, 0);
 		break;
 	}
+
 	return FALSE;
 }
