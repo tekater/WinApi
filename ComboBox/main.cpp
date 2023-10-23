@@ -39,6 +39,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDOK:
 		{
 			CONST INT SIZE = 256;
+
 			CHAR sz_buffer[SIZE] = {};
 			HWND hCombo = GetDlgItem(hwnd, IDC_COMBO1);
 
@@ -59,11 +60,11 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 		case IDCANCEL:	EndDialog(hwnd, 0);		break;
-
 		}
 		break;
 
 	case WM_CLOSE:	EndDialog(hwnd, 0);		break;
 	}
+
 	return FALSE;
 }
