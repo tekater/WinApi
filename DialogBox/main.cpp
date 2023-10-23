@@ -1,6 +1,11 @@
 #include <Windows.h>
 #include "resource.h"
 
+
+CONST CHAR g_sz_LOGIN_INVITATION[] = "¬ведите им€ пользовател€";
+CONST CHAR g_sz_PASSWORD_INVITATION[] = "¬ведите пароль";
+
+
 BOOL CALLBACK DlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
@@ -21,48 +26,46 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON2));
 		SendMessage(hwnd, WM_SETICON, 0, (LRESULT)hIcon);
 		SetFocus(GetDlgItem(hwnd, IDC_EDIT_PASSWORD));
-		//SetFocus(GetDlgItem(hwnd, IDC_EDIT_LOGIN));
-		//SetFocus(GetDlgItem(hwnd, IDOK));
-		if (GetFocus() == GetDlgItem(hwnd, IDC_EDIT_LOGIN)) {
-			SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_SETTEXT, 0, (LPARAM)"");
-		}
-		else {
-			SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_SETTEXT, 0, (LPARAM)"¬ведите логин");
-		}
-		//SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_SETTEXT, 0, (LPARAM)"");
+
+		HWND hEditLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
+		SendMessage(hEditLogin, WM_SETTEXT, 0, (LPARAM)g_sz_LOGIN_INVITATION);
 	}
 		break;
 
-	
 
 	case WM_COMMAND:
 
 		switch (LOWORD(wParam))
 		{
-
-		/*case IDC_EDIT_LOGIN:
+		case IDC_EDIT_LOGIN:
 		{
-			CHAR lg_buffer[256] = {};
-			SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_GETTEXT, 256, (LPARAM)lg_buffer);
+			CONST INT SIZE = 256;
+			CHAR sz_buffer[SIZE] = {};
+			HWND hEditLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
+			SendMessage(hEditLogin, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
+			if (HIWORD(wParam) == EN_SETFOCUS && strcmp(sz_buffer, g_sz_LOGIN_INVITATION) == 0) {
+				SendMessage(hEditLogin, WM_SETTEXT, 0, (LPARAM)"");
+			}
+			if (HIWORD(wParam) == EN_KILLFOCUS && strcmp(sz_buffer, "") == 0) {
+				SendMessage(hEditLogin, WM_SETTEXT, 0, (LPARAM)g_sz_LOGIN_INVITATION);
+			}
+		}
+		break;
 
-			if ((LPARAM)lg_buffer == (LPARAM)"¬ведите логин")
-			{
-				SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_SETTEXT, 0, (LPARAM)"");
+		case IDC_EDIT_PASSWORD:
+		{
+			CONST INT SIZE = 256;
+			CHAR sz_buffer[SIZE] = {};
+			HWND hEditPassword = GetDlgItem(hwnd, IDC_EDIT_PASSWORD);
+			SendMessage(hEditPassword, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
+			if (HIWORD(wParam) == EN_SETFOCUS && strcmp(sz_buffer, g_sz_PASSWORD_INVITATION) == 0) {
+				SendMessage(hEditPassword, WM_SETTEXT, 0, (LPARAM)"");
+			}
+			if (HIWORD(wParam) == EN_KILLFOCUS && strcmp(sz_buffer, "") == 0) {
+				SendMessage(hEditPassword, WM_SETTEXT, 0, (LPARAM)g_sz_PASSWORD_INVITATION);
 			}
 		}
 			break;
-		
-		case IDC_EDIT_PASSWORD:
-		{
-			CHAR lg_buffer[256] = {};
-			SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_GETTEXT, 256, (LPARAM)lg_buffer);
-
-			if ((LPARAM)lg_buffer == (LPARAM)"")
-			{
-				SendMessage(GetDlgItem(hwnd, IDC_EDIT_LOGIN), WM_SETTEXT, 0, (LPARAM)"¬ведите логин");
-			}
-		}
-			break;*/
 
 		case IDC_BUTTON_COPY:
 		{
