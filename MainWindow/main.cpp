@@ -1,24 +1,17 @@
-
-                   [   ]     v1 Byte = 8 Bit			
-
-             [   ] [   ]    1 Word = 2 Bytes	  	  	   
-
- [   ] [   ] [   ] [   ]    1 Dword(Double Word) = 4 Bytes
- {  Loword } { HIWORD  }
-
- Focus - это часть окна которая принимает ?внимание? с клавиатуры.
-
- hwnd - Handler to Window (Обработчик окна)
- uMsg - unsignedMessage  - сообщение(беззнаковая переменная)
- wParam, lParam - параметры сообщения
+#include <Windows.h>
+#include"resource.h"
 
 
- ~Главное окно
+CONST CHAR g_sz_WINDOW_CLASS[] = "My Window Class"; // Имя класса окна
 
-  INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+
+INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
------// Главное окно создаётся в 3 этапа:
------//*1 этап - Регистрация класса окна :
+	// Главное окно создаётся в 3 этапа:
+	//*1 этап - Регистрация класса окна :
 
 	WNDCLASSEX wc;
 	ZeroMemory(&wc, sizeof(wc));
@@ -53,7 +46,7 @@
 	}
 
 
--------*2 этап - Создание окна:
+	//*2 этап - Создание окна:
 	HWND hwnd = CreateWindowEx
 	(
 		NULL,							// ExStyle
@@ -81,7 +74,7 @@
 	UpdateWindow(hwnd);
 
 
--------3 этап - Запуск цикла сообщений:
+	//3 этап - Запуск цикла сообщений:
 	MSG msg;
 	while(GetMessage(&msg, 0, 0, 0) > 0) 
 	{
@@ -90,5 +83,28 @@
 	}
 
 	return msg.wParam;
+
+}
+
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+
+	switch (uMsg)
+	{
+
+	case WM_CREATE:
+		break;
+
+	case WM_COMMAND:
+		break;
+
+	case WM_DESTROY: PostQuitMessage(0); break;
+	case WM_CLOSE: DestroyWindow(hwnd); break;
+
+	default: return DefWindowProc(hwnd, uMsg, wParam, lParam);
+	}
+	return NULL;
+
 
 }

@@ -26,6 +26,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	return 0;
 }
 
+
 BOOL CALLBACK DlgProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam) 
 {
 	switch (uMsg)
@@ -70,7 +71,7 @@ BOOL CALLBACK DlgProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 		case IDCANCEL: EndDialog(hwnd, 0); break;
 		}
-
+		break;
 	case WM_CLOSE: EndDialog(hwnd, 0); break;
 	}
 
