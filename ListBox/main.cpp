@@ -7,6 +7,8 @@
 
 
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+BOOL CALLBACK DlgProcAdd(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
 
 
 CONST CHAR* g_sz_FIGHTERS[] = 
@@ -50,7 +52,7 @@ BOOL CALLBACK DlgProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 		switch (LOWORD(wParam))
 		{
-
+			
 		case IDOK:
 		{
 			CONST INT SIZE = 256;
@@ -76,13 +78,31 @@ BOOL CALLBACK DlgProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 		case IDC_BUTTON_ADD:
 		{
+
+			//DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, DlgProcAdd, 0);
 			CONST INT SIZE = 256;
 
 			CHAR edit_buffer[SIZE] = {};
 			HWND hEdit = GetDlgItem(hwnd, IDC_EDIT_LB);
 
 			SendMessage(hEdit, WM_GETTEXT, IDC_EDIT_LB, (LPARAM)edit_buffer);
-			if ((LPARAM)edit_buffer == (LPARAM)"") 
+			if (SendMessage(GetDlgItem(hwnd, IDC_LIST1), LB_FINDSTRING, -1, (LPARAM)edit_buffer) == CB_ERR)
+			{
+				if (strlen(edit_buffer) == 0) {
+					break;
+				}
+				SendMessage(GetDlgItem(hwnd, IDC_LIST1), LB_ADDSTRING, 0, (LPARAM)edit_buffer);
+			}
+			else {
+				MessageBox
+				(
+					hwnd,
+					"Такое значение уже есть.",
+					"Чувак у тебя проблемы.",
+					MB_OK | MB_ICONERROR
+				);
+			}
+			/*if ((LPARAM)edit_buffer == (LPARAM)"") 
 			{
 				MessageBox
 				(
@@ -96,8 +116,7 @@ BOOL CALLBACK DlgProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 			HWND hList = GetDlgItem(hwnd, IDC_LIST1);
 			SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)edit_buffer);
-			}
-			//2119
+			}*/
 		}
 		break;
 
@@ -129,3 +148,48 @@ BOOL CALLBACK DlgProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 	return FALSE;
 }
+
+/*
+BOOL CALLBACK DlgProcAdd(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (uMsg) {
+	case WM_INITDIALOG:
+
+		break;
+	case WM_COMMAND:
+	SetFocus(GetDlgProc(hwnd,IDC_EDIT_ADD));
+		switch (LOWORD(wParam))
+		{
+		case IDOK:
+		{
+			CONST INT SIZE = 256;
+			CHAR sz_buffer[SIZE]{};
+
+			HWND hEdit = GetDlgItem(hwnd, IDC_EDIT_ADD);
+			SendMessage(hEdit, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
+
+			HWND parent = GetParent(hwnd);
+			HWND hCombo = GetDlgItem(parent, IDC_COMBO1);
+			if (SendMessage(hCombo, CB_FINDSTRING, -1, (LPARAM)sz_buffer) == CB_ERR)
+			{
+			SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM)sz_buffer);
+			}
+			else {
+				MessageBox
+				(
+					hwnd,
+					"Такое значение уже есть.",
+					"Чувак у тебя проблемы.",
+					MB_OK | MB_ICONINFORMATION
+				);
+			}
+
+
+		}
+		case IDCANCEL:EndDialog(hwnd, 0); break;
+		}
+	case WM_CLOSE: EndDialog(hwnd, 0); break;
+	}
+	return FALSE;
+}
+*/
