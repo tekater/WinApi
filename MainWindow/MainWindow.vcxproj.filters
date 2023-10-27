@@ -30,10 +30,10 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="valorant_logo_play_riot_games_icon_228477.ico">
+    <Image Include="valorant_logo.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="among_us_player_red_icon_156942.ico">
+    <Image Include="amogus.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
