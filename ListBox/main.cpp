@@ -3,6 +3,7 @@
 #include<cstdio>
 #include<Windows.h>
 #include"resource.h"
+//#include<Winuser.h>
 
 
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -38,6 +39,10 @@ BOOL CALLBACK DlgProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		for (int i = 0; i < sizeof(g_sz_FIGHTERS) / sizeof(g_sz_FIGHTERS[0]); i++) {
 			SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)g_sz_FIGHTERS[i]);
 		}
+		/*CONST INT SIZE = 256;
+		CHAR pos_buffer[SIZE] = {};
+		SendMessage(hwnd, WM_SETTEXT, (LPARAM)pos_buffer, (LPARAM)((CHAR)GetSystemMetrics(SM_CXDLGFRAME)));
+		SendMessage(hwnd, WM_SETTEXT, 0, (LPARAM)pos_buffer);*/
 	}
 	break;
 
@@ -68,6 +73,53 @@ BOOL CALLBACK DlgProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			);
 		}
 			break;
+
+		case IDC_BUTTON_ADD:
+		{
+			CONST INT SIZE = 256;
+
+			CHAR edit_buffer[SIZE] = {};
+			HWND hEdit = GetDlgItem(hwnd, IDC_EDIT_LB);
+
+			SendMessage(hEdit, WM_GETTEXT, IDC_EDIT_LB, (LPARAM)edit_buffer);
+			if ((LPARAM)edit_buffer == (LPARAM)"") 
+			{
+				MessageBox
+				(
+					hwnd,
+					"Впишите имя Бойца:",
+					"?",
+					MB_OK | MB_ICONERROR
+					);
+			}
+			else if((LPARAM)edit_buffer != (LPARAM)""){
+
+			HWND hList = GetDlgItem(hwnd, IDC_LIST1);
+			SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)edit_buffer);
+			}
+			//2119
+		}
+		break;
+
+		case IDC_BUTTON_DEL:
+		{
+			MessageBox
+			(
+				hwnd,
+				"Вы серьёзно хотите удалить этого бойца?",
+				"REALY????",
+				MB_YESNOCANCEL | MB_ICONERROR
+			);
+
+			CONST INT SIZE = 256;
+
+			CHAR sz_buffer[SIZE] = {};
+			HWND hList = GetDlgItem(hwnd, IDC_LIST1);
+
+			int i = SendMessage(hList, LB_GETCURSEL, 0, 0);
+			SendMessage(hList, LB_DELETESTRING, i, (LPARAM)sz_buffer);
+		}
+		break;
 
 		case IDCANCEL: EndDialog(hwnd, 0); break;
 		}
