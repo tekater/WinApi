@@ -26,7 +26,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	//wc.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_RAM)); // Sm - Small
 	wc.hIcon = (HICON)LoadImage(hInstance, "amogus.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
 	wc.hIconSm = (HICON)LoadImage(hInstance, "valorant_logo.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+	//wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wc.hCursor = LoadCursor(hInstance, (LPCSTR)((HCURSOR)LoadCursorFromFile("ncurs.ico")));
+	//wc.hCursor = LoadCursorFromFile("ncurs.ico");
+	wc.hCursor = SetCursor((HCURSOR)LoadCursorFromFile("ncurs.ico"));
 	wc.hbrBackground = HBRUSH(COLOR_WINDOW + 1);
 
 	wc.hInstance = hInstance; // hInstance - это экземпл€р исполн€емого файла программы в пам€ти(оперативной)
