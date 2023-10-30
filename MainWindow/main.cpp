@@ -65,14 +65,27 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 
 
 	//*2 этап - Создание окна:
+	INT screen_width = GetSystemMetrics(SM_CXSCREEN);
+	INT screen_height = GetSystemMetrics(SM_CYSCREEN);
+
+	//CHAR sz_msg[MAX_PATH]{};
+	//sprintf(sz_msg, "Resolution: %ix%i", screen_width, screen_height);
+	//MessageBox(NULL, sz_msg, "Screen resolution", MB_OK);
+
+	INT window_width = screen_width * 3 / 4;
+	INT window_height = screen_height * 3 / 4;
+
+	INT start_x = screen_width / 8;
+	INT start_y = screen_height / 8;
+
 	HWND hwnd = CreateWindowEx
 	(
 		NULL,							// ExStyle
 		g_sz_WINDOW_CLASS,				// Class Name
 		g_sz_WINDOW_CLASS,				// Window name
 		WS_OVERLAPPEDWINDOW,			// У главного окна всегда будет такой стиль
-		CW_USEDEFAULT, CW_USEDEFAULT,	// Position - положение окна на экране
-		CW_USEDEFAULT, CW_USEDEFAULT,	// Size - Размер окна
+		start_x, start_y,	// Position - положение окна на экране
+		window_width, window_height,	// Size - Размер окна
 		NULL,							//Parent Window
 		//---------------------------------------------
 		NULL,		// hMenu - для главного окна этот параметр содержит ID-ресурса меню
@@ -155,6 +168,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		);
 	}
 	break;
+
 	case WM_SETCURSOR:
 	{
 		HWND hCombo = GetDlgItem(hwnd, IDC_COMBO);
@@ -177,6 +191,27 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SetCursor(hCursor);
 	}
 	break;
+
+	case WM_SIZE:
+	case WM_MOVE:
+	{
+		RECT rect;
+		GetWindowRect(hwnd, &rect);
+
+		CHAR sz_message[MAX_PATH]{};
+
+		sprintf
+		(
+			sz_message, "%s - Position: %ix%i, Size: %ix%i", 
+			g_sz_WINDOW_CLASS, 
+			rect.left, rect.top,
+			rect.right-rect.left,rect.bottom-rect.top
+		);
+
+		SendMessage(hwnd, WM_SETTEXT, 0, (LPARAM)sz_message);
+	}
+	break;
+
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
