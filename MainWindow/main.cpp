@@ -2,7 +2,8 @@
 
 #include <Windows.h>
 #include"resource.h"
-
+#include <vector>
+#include <string>
 
 CONST CHAR g_sz_WINDOW_CLASS[] = "My Window Class"; // Имя класса окна
 
@@ -13,6 +14,7 @@ CONST CHAR* g_CURSOR[] = { "busy.ani" ,"default.ani"};
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+std::vector<std::string> LoadCursorsFromDir(const std::string& directory);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
@@ -122,9 +124,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
-		for (int i = 0; i < sizeof(g_CURSOR) / sizeof(g_CURSOR[0]); i++)
+		/*for (int i = 0; i < sizeof(g_CURSOR) / sizeof(g_CURSOR[0]); i++)
 		{
 			SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM)g_CURSOR[i]);
+		}*/
+
+		//CHAR sz_current_directory[MAX_PATH];
+
+		std::vector<std::string> cursors = LoadCursorsFromDir("UniCursor\\*");
+		for (int i = 0; i < cursors.size(); i++) 
+		{
+			SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM)cursors[i].c_str());
 		}
 
 		HWND hButton = CreateWindowEx
@@ -185,15 +195,18 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				IMAGE_CURSOR,
 				LR_DEFAULTSIZE, LR_DEFAULTSIZE,
 				LR_LOADFROMFILE);
-
-			SetCursor(hCursor);
+			SetClassLong(hwnd, -12, (LONG)hCursor);
+			SetClassLong(GetDlgItem(hwnd, IDC_BUTTON_APPLY), GCLP_HCURSOR, (LONG)hCursor);
+			SetClassLong(GetDlgItem(hwnd, IDC_COMBO), GCLP_HCURSOR, (LONG)hCursor);
+			//SetCursor(hCursor);
 			/*SetCursor((HCURSOR)LoadImage(GetModuleHandle(NULL),
 				sz_filename,
 				IMAGE_CURSOR,
 				LR_DEFAULTSIZE, LR_DEFAULTSIZE,
 				LR_LOADFROMFILE));*/
+			return FALSE;
 		}
-
+		break;
 		}
 		break;
 
@@ -205,4 +218,28 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return NULL;
 
 
+}
+
+
+std::vector<std::string> LoadCursorsFromDir(const std::string& directory)
+{
+	std::vector<std::string> files;
+	WIN32_FIND_DATA data;
+
+	for (
+		HANDLE hFind = FindFirstFile(directory.c_str(), &data);
+		FindNextFile(hFind, &data);
+		)
+		// const char* std::string::c_str() возвращает C-string, хранящийся в объекте std::string
+	{
+		if  (
+			strcmp(strrchr(data.cFileName, '.'), ".cur") == 0 ||
+			strcmp(strrchr(data.cFileName, '.'), ".ani") == 0
+			)
+		{
+		files.push_back(data.cFileName);
+		}
+	}
+
+	return files;
 }
