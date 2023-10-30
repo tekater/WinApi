@@ -36,7 +36,9 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wc.hIconSm = (HICON)LoadImage(hInstance, "valorant_logo.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
 	//wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	//wc.hCursor = LoadCursor(hInstance, (LPCSTR)(LoadCursorFromFile("ncurs.cur")));
+	
 	wc.hCursor = (HCURSOR)LoadImage(hInstance, "01_normal_select.cur", IMAGE_CURSOR, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
+	
 	//wc.hCursor = LoadCursor(NULL, (LPCSTR)((HCURSOR)LoadCursorFromFile("ncurs.cur")));
 	//wc.hCursor = LoadCursorFromFile("ncurs.png");
 	//wc.hCursor = SetCursor((HCURSOR)LoadCursorFromFile("ncurs.ico"));
@@ -116,7 +118,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			NULL,
 			"ComboBox",
 			"",
-			WS_CHILD | WS_VISIBLE | CBS_DROPDOWN,
+			WS_CHILD | WS_VISIBLE | CBN_DROPDOWN | WS_VSCROLL,
 			10, 10,
 			200, 200,
 			hwnd,
@@ -129,7 +131,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM)g_CURSOR[i]);
 		}*/
 
-		//CHAR sz_current_directory[MAX_PATH];
+		CHAR sz_current_directory[MAX_PATH];
+		GetCurrentDirectory(MAX_PATH, sz_current_directory);
 
 		std::vector<std::string> cursors = LoadCursorsFromDir("UniCursor\\*");
 		for (int i = 0; i < cursors.size(); i++) 
@@ -177,6 +180,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
+		
 		case IDC_BUTTON_APPLY:
 		{
 			HWND hCombo = GetDlgItem(hwnd, IDC_COMBO);
@@ -206,7 +210,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				LR_LOADFROMFILE));*/
 			return FALSE;
 		}
-		break;
 		}
 		break;
 
