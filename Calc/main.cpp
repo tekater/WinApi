@@ -64,10 +64,10 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			CHAR Z[SIZE] = {};
 
 			SendMessage(GetDlgItem(hwnd, IDC_STATIC_Z), WM_GETTEXT, SIZE, (LPARAM)Z);
-
+			
 			if ((LPARAM)Z == (LPARAM)"+")
 			{
-				sprintf(sz_buffer_ANS, "%i", (A + B));
+				sprintf(sz_buffer_ANS, "%d", (A + B));
 			}
 			if ((LPARAM)Z == (LPARAM)"-")
 			{
