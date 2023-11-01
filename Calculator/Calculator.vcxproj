@@ -21,10 +21,9 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{897e2e34-eade-46cc-95f3-27af47bfe54b}</ProjectGuid>
-    <RootNamespace>Calc</RootNamespace>
+    <ProjectGuid>{092c4c39-26f7-4789-a951-240f10578613}</ProjectGuid>
+    <RootNamespace>Calculator</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>CalcHomeWork</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -134,10 +133,7 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Calc.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="valorant_logo_play_riot_games_icon_228477.ico" />
+    <ResourceCompile Include="Calculator.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

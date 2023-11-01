@@ -18,7 +18,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ListBox", "ListBox\ListBox.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MainWindow", "MainWindow\MainWindow.vcxproj", "{1EC7C7E6-9A9F-4B35-B880-D45C04E605FB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Calc", "Calc\Calc.vcxproj", "{897E2E34-EADE-46CC-95F3-27AF47BFE54B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CalcHomeWork", "Calc\Calc.vcxproj", "{897E2E34-EADE-46CC-95F3-27AF47BFE54B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Calculator", "Calculator\Calculator.vcxproj", "{092C4C39-26F7-4789-A951-240F10578613}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,6 +78,14 @@ Global
 		{897E2E34-EADE-46CC-95F3-27AF47BFE54B}.Release|x64.Build.0 = Release|x64
 		{897E2E34-EADE-46CC-95F3-27AF47BFE54B}.Release|x86.ActiveCfg = Release|Win32
 		{897E2E34-EADE-46CC-95F3-27AF47BFE54B}.Release|x86.Build.0 = Release|Win32
+		{092C4C39-26F7-4789-A951-240F10578613}.Debug|x64.ActiveCfg = Debug|x64
+		{092C4C39-26F7-4789-A951-240F10578613}.Debug|x64.Build.0 = Debug|x64
+		{092C4C39-26F7-4789-A951-240F10578613}.Debug|x86.ActiveCfg = Debug|Win32
+		{092C4C39-26F7-4789-A951-240F10578613}.Debug|x86.Build.0 = Debug|Win32
+		{092C4C39-26F7-4789-A951-240F10578613}.Release|x64.ActiveCfg = Release|x64
+		{092C4C39-26F7-4789-A951-240F10578613}.Release|x64.Build.0 = Release|x64
+		{092C4C39-26F7-4789-A951-240F10578613}.Release|x86.ActiveCfg = Release|Win32
+		{092C4C39-26F7-4789-A951-240F10578613}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
