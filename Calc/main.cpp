@@ -91,9 +91,9 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDCANCEL: EndDialog(hwnd, 0); break;
 		}
 	}
-		break;
-		
-	
+	break;
+
+
 	case WM_CLOSE: EndDialog(hwnd, 0); break;
 	}
 
