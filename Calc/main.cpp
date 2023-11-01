@@ -2,14 +2,12 @@
 
 #include <Windows.h>
 #include<cstdio>
-
 #include "resource.h"
 
 BOOL CALLBACK DlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
-	
 	DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), NULL, (DLGPROC)DlgProc, 0);
 	return 0;
 }
@@ -23,6 +21,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
 		SendMessage(hwnd, WM_SETICON, 0, (LRESULT)hIcon);
+		SendMessage(GetDlgItem(hwnd, IDC_STATIC_Z), WM_SETTEXT, 1, (LPARAM)"?");
 	}
 	break;
 
@@ -64,7 +63,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			CHAR Z[SIZE] = {};
 
 			SendMessage(GetDlgItem(hwnd, IDC_STATIC_Z), WM_GETTEXT, SIZE, (LPARAM)Z);
-			
+
 			if (strcmp(Z, "+") == 0)
 			{
 				sprintf(sz_buffer_ANS, "%d", (A + B));
@@ -81,11 +80,9 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
 				sprintf(sz_buffer_ANS, "%d", (A / B));
 			}
-			
+
 			SendMessage(GetDlgItem(hwnd, IDC_STATIC_ANS), WM_SETTEXT, SIZE, (LPARAM)sz_buffer_ANS);
 
-		}
-		break;
 		}
 		break;
 		case IDOK:
@@ -93,6 +90,9 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		case IDCANCEL: EndDialog(hwnd, 0); break;
 		}
+	}
+		break;
+		
 	
 	case WM_CLOSE: EndDialog(hwnd, 0); break;
 	}
