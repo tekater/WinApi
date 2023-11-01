@@ -65,25 +65,23 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			SendMessage(GetDlgItem(hwnd, IDC_STATIC_Z), WM_GETTEXT, SIZE, (LPARAM)Z);
 			
-			if ((LPARAM)Z == (LPARAM)"+")
+			if (strcmp(Z, "+") == 0)
 			{
 				sprintf(sz_buffer_ANS, "%d", (A + B));
 			}
-			if ((LPARAM)Z == (LPARAM)"-")
+			if (strcmp(Z, "-") == 0)
 			{
 				sprintf(sz_buffer_ANS, "%d", (A - B));
 			}
-			if ((LPARAM)Z == (LPARAM)"*")
+			if (strcmp(Z, "*") == 0)
 			{
 				sprintf(sz_buffer_ANS, "%d", (A * B));
 			}
-			if ((LPARAM)Z == (LPARAM)"/")
+			if (strcmp(Z, "/") == 0)
 			{
 				sprintf(sz_buffer_ANS, "%d", (A / B));
 			}
-			sprintf(sz_buffer_ANS, "%i", (A + B));
 			
-			MessageBox(hwnd, Z, "ok", MB_OK);
 			SendMessage(GetDlgItem(hwnd, IDC_STATIC_ANS), WM_SETTEXT, SIZE, (LPARAM)sz_buffer_ANS);
 
 		}
