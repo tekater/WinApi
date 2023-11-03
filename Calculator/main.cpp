@@ -144,7 +144,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		// , 
 		CreateWindowEx
 		(
-			NULL, "Button", ",",
+			NULL, "Button", ".",
 			WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON,
 			BUTTON_START_X + BUTTON_DOUBLE_SIZE + INTERVAL, BUTTON_START_Y + (BUTTON_SIZE + INTERVAL) * 3,
 			BUTTON_SIZE, BUTTON_SIZE,
@@ -227,9 +227,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			NULL, "Button", "C",
 			WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON,
 			BUTTON_START_X + (BUTTON_SIZE + INTERVAL) * 4, BUTTON_START_Y,
-			BUTTON_SIZE, BUTTON_DOUBLE_SIZE,
+			BUTTON_SIZE, BUTTON_SIZE,
 			hwnd,
 			(HMENU)(IDC_BUTTON_CLEAR),
+			GetModuleHandle(NULL),
+			NULL
+		);
+		CreateWindowEx
+		(
+			NULL, "Button", "<-",
+			WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON,
+			BUTTON_START_X + (BUTTON_SIZE + INTERVAL) * 4, BUTTON_START_Y + (BUTTON_SIZE + INTERVAL),
+			BUTTON_SIZE, BUTTON_SIZE,
+			hwnd,
+			(HMENU)(IDC_BUTTON_BSP),
 			GetModuleHandle(NULL),
 			NULL
 		);
@@ -249,10 +260,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	break;
 
 	case WM_COMMAND:
+
 		
+		// 1-9
 		if (LOWORD(wParam) >= IDC_BUTTON_0 && LOWORD(wParam) <= IDC_BUTTON_9 || LOWORD(wParam) == IDC_BUTTON_POINT)
 		{
-
 			HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);
 			CHAR sz_buffer[MAX_PATH]{};
 			SendMessage(hEdit, WM_GETTEXT, MAX_PATH, (LPARAM)sz_buffer);
@@ -281,6 +293,29 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			strcat(sz_buffer, sz_digit);
 			SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)sz_buffer);
 		}
+
+		// C
+		if (LOWORD(wParam) == IDC_BUTTON_CLEAR)
+		{
+			SendMessage(GetDlgItem(hwnd,IDC_EDIT), WM_SETTEXT, 0, (LPARAM)"");
+		}
+
+		// <-
+		if (LOWORD(wParam) == IDC_BUTTON_BSP)
+		{
+			CHAR sz_buffer[MAX_PATH]{};
+			SendMessage(GetDlgItem(hwnd, IDC_EDIT), WM_GETTEXT, MAX_PATH, (LPARAM)sz_buffer);
+
+			if (strcmp(sz_buffer, "0") == 0 || strlen(sz_buffer) == 0)
+			{
+				break;
+			}
+
+			sz_buffer[strlen(sz_buffer) - 1] = 0;
+			SendMessage(GetDlgItem(hwnd, IDC_EDIT), WM_SETTEXT, 0, (LPARAM)sz_buffer);
+		}
+
+
 	break;
 	case WM_DESTROY:	PostQuitMessage(0);									break;
 	case WM_CLOSE:		DestroyWindow(hwnd);								break;
