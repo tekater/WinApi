@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include<Windows.h>
+#include<stdio.h>
 #include"resource.h"
 
 CONST CHAR g_sz_CLASSNAME[] = "Calc";
@@ -56,7 +57,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmsLine, IN
 		NULL,
 		g_sz_CLASSNAME,
 		g_sz_CLASSNAME,
-		WS_OVERLAPPEDWINDOW,
+		WS_OVERLAPPEDWINDOW^WS_THICKFRAME^WS_MAXIMIZEBOX, // WS_THICKFRAME - позволяет изменять размер окна ,WS_MAXIMIZEBOX - Расширяет окно до полного экрана
+		//WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		CW_USEDEFAULT, CW_USEDEFAULT,
 		(BUTTON_SIZE + INTERVAL) * 5 + (BUTTON_START_X * 3), SCREEN_HEIGHT + (BUTTON_SIZE + INTERVAL) * 5 + INTERVAL * 2, 
 		NULL,
@@ -87,6 +89,13 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmsLine, IN
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	static DOUBLE a = 0, b = 0;
+
+	static INT operation = 0;
+
+	static BOOL input = false;				// отслеживает ввод чисел
+	static BOOL input_operation = false;	// отслеживает ввод операции
+
 	switch (uMsg) 
 	{
 	case WM_CREATE:
@@ -233,6 +242,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
+		// <-
 		CreateWindowEx
 		(
 			NULL, "Button", "<-",
@@ -260,16 +270,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	break;
 
 	case WM_COMMAND:
-
-		
-		// 1-9
+	{
+			HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);
+		//								Digits && Points
+		//									  1-9
 		if (LOWORD(wParam) >= IDC_BUTTON_0 && LOWORD(wParam) <= IDC_BUTTON_9 || LOWORD(wParam) == IDC_BUTTON_POINT)
 		{
-			HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);
+			if (!input) 
+			{
+				SendMessage(GetDlgItem(hwnd, IDC_EDIT), WM_SETTEXT, 0, (LPARAM)"");
+			}
+			input = true;
 			CHAR sz_buffer[MAX_PATH]{};
 			SendMessage(hEdit, WM_GETTEXT, MAX_PATH, (LPARAM)sz_buffer);
 
-			if (strcmp(sz_buffer,"Screen") == 0)
+			if (strcmp(sz_buffer, "Screen") == 0)
 			{
 				SendMessage(GetDlgItem(hwnd, IDC_EDIT), WM_SETTEXT, 0, (LPARAM)"");
 				sz_buffer[0] = 0;
@@ -278,7 +293,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			CHAR sz_digit[2]{};
 			if (LOWORD(wParam) == IDC_BUTTON_POINT)
 			{
-				if (strchr(sz_buffer, '.') == 0)
+				if (strchr(sz_buffer, '.'))
 				{
 					break;
 				}
@@ -286,23 +301,27 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 			else
 			{
-				strcat(sz_buffer, sz_digit);
+				sz_digit[0] = LOWORD(wParam) - IDC_BUTTON_0 + 48;
 			}
-			sz_digit[0] = LOWORD(wParam) - IDC_BUTTON_0 + 48;
 
 			strcat(sz_buffer, sz_digit);
 			SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)sz_buffer);
 		}
-
+		//						Operations:
 		// C
 		if (LOWORD(wParam) == IDC_BUTTON_CLEAR)
 		{
-			SendMessage(GetDlgItem(hwnd,IDC_EDIT), WM_SETTEXT, 0, (LPARAM)"");
+			a = b = 0;
+			operation = 0;
+			input = false;
+
+			SendMessage(GetDlgItem(hwnd, IDC_EDIT), WM_SETTEXT, 0, (LPARAM)"");
 		}
 
 		// <-
 		if (LOWORD(wParam) == IDC_BUTTON_BSP)
 		{
+			
 			CHAR sz_buffer[MAX_PATH]{};
 			SendMessage(GetDlgItem(hwnd, IDC_EDIT), WM_GETTEXT, MAX_PATH, (LPARAM)sz_buffer);
 
@@ -315,8 +334,95 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SendMessage(GetDlgItem(hwnd, IDC_EDIT), WM_SETTEXT, 0, (LPARAM)sz_buffer);
 		}
 
+		//		/		*		+		-
+		if (LOWORD(wParam) >= IDC_BUTTON_PLUS && LOWORD(wParam) <= IDC_BUTTON_SLASH)
+		{
+			if (input)
+			{
+				CHAR sz_buffer[MAX_PATH]{};
+				SendMessage(hEdit, WM_GETTEXT, MAX_PATH, (LPARAM)sz_buffer);
+				b = atof(sz_buffer);	// Convert string to Double
+				input = false;
+				if (a == 0)
+				{
+					a = b;
+				}
+			}
+			input = false;
+			if (input_operation)
+			{
+				SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_EQUAL, 0);
+			}
+			operation = LOWORD(wParam);
 
+			
+
+			input_operation = true;
+		}
+
+		// =
+		if (LOWORD(wParam) == IDC_BUTTON_EQUAL)
+		{
+			if (input)
+			{
+				CHAR sz_buffer[MAX_PATH]{};
+				SendMessage(hEdit, WM_GETTEXT, MAX_PATH, (LPARAM)sz_buffer);
+				b = atof(sz_buffer);	// Convert string to Double
+				input = false;
+				if (a == 0)
+				{
+					a = b;
+				}
+			}
+			switch (operation)
+			{
+			case IDC_BUTTON_PLUS:		a += b;		break;
+			case IDC_BUTTON_MINUS:		a -= b;		break;
+			case IDC_BUTTON_ASTER:		a *= b;		break;
+			case IDC_BUTTON_SLASH:		a /= b;		break;
+			}
+			CHAR sz_buffer[MAX_PATH]{};
+			sprintf(sz_buffer, "%g", a);
+			SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)sz_buffer);
+			input_operation = false;
+		}
+		
+	}
 	break;
+
+	case WM_KEYDOWN:
+	{
+		if (GetKeyState(VK_SHIFT) < 0)
+		{
+			if (wParam == 0x38)
+			{
+				SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_ASTER, 0);
+			}
+			else if(LOWORD(wParam) >= 0x30 && LOWORD(wParam)<= 0x39)
+			{
+				SendMessage(hwnd, WM_COMMAND, LOWORD(wParam) - 0x30 + IDC_BUTTON_0, 0);
+			}
+		}
+		if (LOWORD(wParam) >= 0x30 && LOWORD(wParam) <= 0x39)
+		{
+			SendMessage(hwnd, WM_COMMAND, LOWORD(wParam) - 0x30 + IDC_BUTTON_0, 0);
+		}
+		switch (LOWORD(wParam))
+		{
+			//			+			-			*			/
+		case VK_OEM_PLUS:	SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_PLUS, 0);	break;
+		case VK_OEM_MINUS:	SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_MINUS, 0);	break;
+		case VK_MULTIPLY:	SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_ASTER, 0);	break;
+		case VK_DIVIDE:		SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_SLASH, 0);	break;
+			//			.
+		case VK_OEM_PERIOD: SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_POINT, 0); break;
+			//			=			Clear		<-
+		case VK_RETURN:		SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_EQUAL, 0); break;
+		case VK_ESCAPE:		SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_CLEAR, 0); break;
+		case VK_BACK:		SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_BSP, 0);	break;
+		}
+	}
+		break;
 	case WM_DESTROY:	PostQuitMessage(0);									break;
 	case WM_CLOSE:		DestroyWindow(hwnd);								break;
 	default:			return DefWindowProc(hwnd, uMsg, wParam, lParam);	break;
